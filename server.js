@@ -31,6 +31,25 @@ app.post('/users', async (req, res) => {
   user.save()
   res.send(req.body)
 })
+app.post('/login',async(req, res) => {
+  let user = await userModel.find(req.body);
+  if (user.length>0) {
+    res.send({"res":true});
+  }
+  else{
+    res.send({"res":false})
+  }
+  console.log(user);
+})
+
+app.post('/register', async (req, res) => {
+  let user = new userModel(req.body);
+  let result = await user.save();
+  res.send(result);
+  console.log(result);
+})
+
+
 
 app.get('/cards', async (req, res) => {
   try{

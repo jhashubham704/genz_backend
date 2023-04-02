@@ -5,10 +5,6 @@ const dataSchema = new mongoose.Schema({
         required: true,
         type: String
     },
-    age: {
-        required: true,
-        type: Number
-    },
     email: {
         required: true,
         type: String
@@ -20,11 +16,11 @@ const dataSchema = new mongoose.Schema({
     phone: {
         required: true,
         type: Number
-    },
-    isAdmin:{
-        required:true,
-        type:Boolean
     }
+    // isAdmin:{
+    //     required:true,
+    //     type:Boolean
+    // }
 
 })
 
