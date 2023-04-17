@@ -22,22 +22,16 @@ app.post('/register' , async(req,res)=> {
 app.post('/login' , async(req, res)=>{ 
 
     let user = await User.findOne(req.body) ; 
-    res.send(user) ; 
-    console.log(user) ; 
+     
     if(user.password !=="" && user.email !==""){ 
-        authenticate.authentication('true'); 
+        res.send(user) ; 
+    console.log(user) ;
     }
 })
 
 app.get('/getcontacts' , async(req, res)=> {
     let contacts = await User.find({}); 
-    if(authenticate.authentication()==='true'){ 
         res.send(contacts) ;
-        console.log(contacts)}
-        else { 
-            res.send("please authenticte first")
-        }
-   
  })
 
  app.get('/cards', async (req, res) => {
