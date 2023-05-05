@@ -1,7 +1,7 @@
 
 const express = require("express") ;
 const User = require('./user_model') ;
-const authenticate = require('./authetication')
+const Loggedin_user = require('./loggedin_model') 
 const app = express() ;
 var cors = require('cors')
 app.use(cors()) ; 
@@ -19,6 +19,13 @@ app.post('/register' , async(req,res)=> {
     console.log(result)
 })
 
+let auth =(value)=> { 
+ let authorised = "false" ; 
+ if(value==="true"){ 
+    authorised = "true" ; 
+ }
+ return(authorised); 
+}
 app.post('/login' , async(req, res)=>{ 
 
     let user = await User.findOne(req.body) ; 
@@ -26,11 +33,19 @@ app.post('/login' , async(req, res)=>{
     if(user.password !=="" && user.email !==""){ 
         res.send(user) ; 
     console.log(user) ;
+    auth("true") ; 
     }
+
+})
+
+app.post('/setloggedin' , async(req,res)=> { 
+    let loggedinuser = new Loggedin_user(req.body) ; 
+    let result = await loggedinuser.save(); 
+    res.send(result) ; 
 })
 
 app.get('/getcontacts' , async(req, res)=> {
-    let contacts = await User.find({}); 
+         let contacts = await User.find({}); 
         res.send(contacts) ;
  })
 

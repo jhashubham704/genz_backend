@@ -1,8 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const userModel = require('./models/user.model');
+const User = require('./models/user_model') ;
 const cardModel = require('./models/card.model');
+const textmodel = require('./models/textdata_model')
 var cors = require('cors')
 app.use(cors())
 app.use(express.json())
@@ -31,25 +32,30 @@ app.post('/users', async (req, res) => {
   user.save()
   res.send(req.body)
 })
-app.post('/login',async(req, res) => {
-  let user = await userModel.find(req.body);
-  if (user.length>0) {
-    res.send({"res":true});
-  }
-  else{
-    res.send({"res":false})
-  }
-  console.log(user);
-})
 
-app.post('/register', async (req, res) => {
-  let user = new userModel(req.body);
-  let result = await user.save();
-  res.send(result);
-  console.log(result);
+app.post('/register' , async(req,res)=> { 
+  let user = new User(req.body) ; 
+  let result = await user.save(); 
+  res.send(result) ; 
+  console.log(result)
 })
 
 
+app.post('/login' , async(req, res)=>{ 
+
+  let user = await User.findOne(req.body) ; 
+   
+  if(user.password !=="" && user.email !==""){ 
+      res.send(user) ; 
+  console.log(user) ;
+  }
+
+})
+
+app.get('/getcontacts' , async(req, res)=> {
+  let contacts = await User.find({}); 
+ res.send(contacts) ;
+})
 
 app.get('/cards', async (req, res) => {
   try{
@@ -63,7 +69,7 @@ app.get('/cards', async (req, res) => {
 
 app.get('/experts',async(req,res)=>{
   try{
-    const data = await userModel.find({isAdmin:true});
+    const data = await User.find({isAdmin:true});
     console.log(data);
     
       res.send(data)
@@ -73,6 +79,12 @@ catch(error){
 }
 })
 
+app.post('/gettextdata' , async(req,res)=> { 
+  
+  let data = await textmodel.findOne(req.body);
+  console.log(data) ; 
+  res.send(data); 
+})
 
 
 app.listen(8085, () => {
